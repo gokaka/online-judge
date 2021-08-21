@@ -54,13 +54,13 @@ def find_countries(A):
 
                     """
                     set left equals top father
-                    1 2    (0,0)   (0,1)
-                                     |
-                    2 2    (1,0) - (0,1)
-                           update (1,0) to (0,1) when scan (r,c) at (1,1)
+                    1 1 2    (0,0)   (0,1)   (0,2)
+                                               ^
+                    2 2 2    (0,2) <-(1,0)   (0,2)
+                           update (1,0) root to (0,2) when scan (r,c) at (1,2)
                     """
                     if A[r][c] == A[r][c-1]:
-                        union[(r,c-1)] = union[(r-1,c)]
+                        union[union[(r,c-1)]] = union[(r-1,c)]
                     
                 elif A[r][c] == A[r][c-1]:
                         union[(r,c)] = union[(r,c-1)]
@@ -74,10 +74,47 @@ def find_countries(A):
 
     # find union countries
     for r in range(R):
-        for c in range(C):    
-            country_set.add(union[(r,c)])
+        for c in range(C):
+            root = (r,c)
+            while root != union[root]:
+                root = union[root]
+            country_set.add(root)
     print(country_set)
     return len(country_set)
+
+def dfs_find(A):
+    def adjacent_loc(r,c,R,C,A,visited):
+        locs = []
+        offset = [(-1,0),(1,0),(0,-1),(0,1)]
+        for ox,oy in offset:
+            nr, nc = r+ox, c+oy
+            if 0<= nr < R and 0<= nc < C \
+                and A[nr][nc] == A[r][c] \
+                and (nr,nc) not in visited:
+                locs.append((nr,nc))
+        return locs
+
+    stack = []
+    R = len(A)
+    C = len(A[0])
+    visited = set()
+    countries = 0
+    for r in range(R):
+        for c in range(C):
+            if (r,c) in visited:
+                continue
+            stack = [(r,c)]
+            while stack:
+                # print(stack)
+                _r,_c = stack.pop(-1)
+                adj_locs = adjacent_loc(_r,_c,R,C,A,visited)
+                for loc in adj_locs:
+                    if loc not in visited:
+                        stack.append(loc)
+                        visited.add(loc)
+            countries += 1
+    return countries
+
 
 A =[
 [5, 4, 4],
@@ -89,4 +126,15 @@ A =[
 [4, 1, 1],
 ]
 
+
 print(find_countries(A))
+print(dfs_find(A))
+
+
+A =[
+[2, 2, 4],
+[4, 4, 4],
+]
+
+print(find_countries(A))
+print(dfs_find(A))
