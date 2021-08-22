@@ -37,10 +37,15 @@ each element of array A is an integer within the range [−1,000..1,000].
 In your solution, focus on correctness. The performance of your solution will not be the focus of the assessment.
 
 """
+
+# The following issues have been detected: runtime errors.
+# For example, for the input ([], 0) the solution terminated unexpectedly.
+# https://app.codility.com/demo/results/trainingWA259A-EK6/
+
 def solution(A, K):
     # write your code in Python 3.6
-    if not A:
-        return A
+    if not A: # extreme_empty case
+        return A 
     rotate = K % len(A)
     for i in range(rotate):
         a0 = A.pop(-1)
@@ -52,4 +57,4 @@ print(solution([3, 8, 9, 7, 6], 3))
 print(solution([1, 2, 3, 4], 4))
 print(solution([0, 0, 0], 1))
 
-# https://app.codility.com/demo/results/trainingWA259A-EK6/
+# https://app.codility.com/demo/results/trainingKVPKQX-JFC/
