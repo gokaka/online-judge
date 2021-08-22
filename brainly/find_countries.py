@@ -132,9 +132,11 @@ print(dfs_find(A))
 
 
 A =[
-[2, 2, 4],
-[4, 4, 4],
+[2, 2, 2, 2, 1],
+[4, 4, 0, 0, 1],
+[2, 2, 1, 1, 1],
+[1, 1, 1, 1, 1],
 ]
 
-print(find_countries(A))
+# print(find_countries(A)) infinite loop
 print(dfs_find(A))
